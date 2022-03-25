@@ -3,47 +3,44 @@ const getData = async () => {
     const response = await fetch("https://api.tvmaze.com/shows/82/episodes");
     const data = await response.json();
     console.log(data);
-    episodeData(data);
+    return data;
   } catch (error) {
     throw new Error("not found...", error);
   }
 };
-getData();
+getData().then((data) => {
+  episodeData(data);
+});
+
 const section = document.querySelector("#section");
 
-//function
+//function Card Maker
 const episodeData = (data) => {
-  const api = data;
-  api.map((episode) => {
+  data.map((episode) => {
     const article = document.createElement("article");
-    console.log(episode.image.medium);
+    //img
     const img = document.createElement("img");
-    img.setAttribute(src, episode.image.medium);
-
-    article.append(img);
+    img.setAttribute("src", episode.image.medium);
+    // run time
+    const p = document.createElement("p");
+    p.innerText = `Run Time ${episode.runtime}`;
+    //link $ seoson
+    const a = document.createElement("a");
+    a.setAttribute("href", episode.url);
+    // seoson
+    const span = document.createElement("span");
+    span.innerText = `S${episode.season} E${episode.number}`;
+    a.append(span);
+    // Details
+    const details = document.createElement("details");
+    const summary = document.createElement("summary");
+    summary.innerText = "Episode Story";
+    const p2 = document.createElement("p");
+    p2.innerText = episode.summary;
+    details.append(summary, p2);
+    //add elements to article
+    article.append(img, p, a, details);
+    //add article to section
     section.append(article);
   });
 };
-
-/* <article class="card">
-  <img
-    src="https://static.tvmaze.com/uploads/images/medium_landscape/1/2668.jpg"
-    alt=""
-    srcset=""
-  />
-  <p class="runTime">run time 60</p>
-  <a href="https://www.tvmaze.com/episodes/4952/game-of-thrones-1x01-winter-is-coming">
-    <span class="episodeName">S01 - Episode 1</span>
-  </a>
-  <details>
-    <summary>story line</summary>
-    <p>
-      Lord Eddard Stark, ruler of the North, is summoned to court by his old
-      friend, King Robert Baratheon, to serve as the King's Hand. Eddard
-      reluctantly agrees after learning of a possible threat to the King's life.
-      Eddard's bastard son Jon Snow must make a painful decision about his own
-      future, while in the distant east Viserys Targaryen plots to reclaim his
-      father's throne, usurped by Robert, by selling his sister in marriage.
-    </p>
-  </details>
-</article>; */
