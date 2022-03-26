@@ -1,3 +1,4 @@
+// API
 const getData = async () => {
   try {
     const response = await fetch("https://api.tvmaze.com/shows/82/episodes");
@@ -12,9 +13,8 @@ getData().then((data) => {
   episodeData(data);
 });
 
-const section = document.querySelector("#section");
-
 //function Card Maker
+const section = document.querySelector("#section");
 const episodeData = (data) => {
   data.map((episode) => {
     const article = document.createElement("article");
